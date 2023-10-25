@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 # System paramters
 
 m = 1 # Mass in kg
-c = 0.2 # Damping constant in Nm/s
+c = 3 # Damping constant in Nm/s
 k = 1 # Spring constant N/m
 
 x_0 = 1 # Initial diplacement

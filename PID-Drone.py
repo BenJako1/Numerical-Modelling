@@ -22,15 +22,14 @@ t_end = 10
 dt = 0.1
 height_0 = 0
 velocity_0 = 0
-disturbanceMagnitude = 5
-damping = True
-desiredHeight = 5
+disturbanceMagnitude = 0
+desiredHeight = 10
 
 # Control parameters
-kp = 7
-ki = 3.6
-kd = 1
-dampingConst = 4
+kp = 8
+ki = 5
+kd = 4
+dampingConst = 6
 
 #------------------------------------------------------------------------------
 # Variable initialisation
@@ -46,6 +45,10 @@ velocityList = [velocity]
 iForce = 0
 prev_error = 0
 
+setPoint = desiredHeight
+setPoint_buffer = [height_0]
+setPointList = [desiredHeight]
+
 #------------------------------------------------------------------------------
 # PID function definition
 
@@ -53,10 +56,7 @@ def PID(previousError, setPoint, processVariable):
     global iForce # Declare iForce as global
     
     error = setPoint - processVariable
-    if damping:
-        pForce = error * kp - velocity * dampingConst
-    else:
-        pForce = error * kp
+    pForce = error * kp - velocity * dampingConst
     iForce += error * dt * ki
     dForce = (error - previousError) / dt * kd
     controlVariable = pForce + iForce + dForce
@@ -67,7 +67,7 @@ def PID(previousError, setPoint, processVariable):
 
 while t < t_end:
     # PID controller
-    force = PID(prev_error, desiredHeight, height)
+    force = PID(prev_error, setPoint, height)
     force += (random.rand() - 0.5) * disturbanceMagnitude
     
     # State updates
@@ -79,12 +79,13 @@ while t < t_end:
     t += dt
     
     # Store error buffer
-    prev_error = desiredHeight - height
+    prev_error = setPoint - height
     
     # Append variables to lists for plotting
     timeList.append(t)
     heightList.append(height)
     velocityList.append(velocity)
+    setPointList.append(setPoint)
 
 #------------------------------------------------------------------------------
 # Plotting results

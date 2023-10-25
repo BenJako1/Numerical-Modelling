@@ -13,8 +13,8 @@ import matplotlib.pyplot as plt
 # System paramters
 
 m = 1 # Mass in kg
-c = 0.4 # Damping constant in Nm/s
-k = 6 # Spring constant N/m
+c = 0.1 # Damping constant in Nm/s
+k = 1 # Spring constant N/m
 
 x_0 = 1 # Initial diplacement
 v_0 = 0 # Initial velocity
@@ -25,7 +25,7 @@ Omega = 1
 #------------------------------------------------------------------------------
 # Simulation parameters
 
-r_max = 4
+r_max = 2
 N = 200
 
 t_0 = 0
@@ -86,13 +86,15 @@ responseList = []
 rList = np.linspace(0, r_max, N)
 
 for Omega in (rList * w_0):
-    t, x, _ = simulate(x_0, v_0, t_0, t_end, dt)
-    X = max(x[-(round(T * dt)):])
+    _, x, _ = simulate(x_0, v_0, t_0, t_end, dt)
+    X = max(x)
     responseList.append(X / x_0)
 
 #------------------------------------------------------------------------------
 # Display   
-plt.plot(rList, responseList) 
+plt.plot(rList, responseList)
+plt.grid()
+plt.show()
 '''
 plt.plot(t, x, 'b-')
 plt.plot(t, F(t), 'r-')
